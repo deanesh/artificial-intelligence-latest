@@ -9,6 +9,25 @@ import time
 
 MODULE = "correlation_utils.py"
 
+def get_imp_con_cols(df: pd.DataFrame, target_col: str, corr_threshold: float):
+    log(
+        "🚀 Fetching important continuous columns from dataframe for features list",
+        source=MODULE,
+    )
+
+    corr_series = (
+        df.corr(numeric_only=True)[target_col]
+        .drop(target_col)
+        .loc[lambda x: x.abs() > corr_threshold]
+        .sort_values(ascending=False)
+    )
+
+    log(
+        "✅ Fetched important continuous columns from dataframe for features list",
+        source=MODULE,
+    )
+    return corr_series
+
 
 def cramers_v(x, y):
     contingency_table = pd.crosstab(x, y)
