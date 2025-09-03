@@ -3,6 +3,7 @@ import numpy as np
 import os
 import time
 import inspect
+import numpy as np
 
 from datetime import datetime
 
@@ -102,7 +103,10 @@ def clean_nulls(
     if filled_columns["datetime"]:
         log(f"   • Datetime fill: {filled_columns['datetime']}", source=MODULE)
     if filled_columns["skipped"]:
-        log(f"   ⚠️ Skipped unsupported columns: {filled_columns['skipped']}", source=MODULE)
+        log(
+            f"   ⚠️ Skipped unsupported columns: {filled_columns['skipped']}",
+            source=MODULE,
+        )
 
     return df_copy
 
@@ -134,7 +138,10 @@ def check_duplicates(df, drop=False, subset=None, keep="first", verbose=True):
 
     if verbose:
         if subset:
-            log(f"🔍 Found {num_dupes} duplicate rows based on columns: {subset}", source=MODULE)
+            log(
+                f"🔍 Found {num_dupes} duplicate rows based on columns: {subset}",
+                source=MODULE,
+            )
         else:
             log(f"🔍 Found {num_dupes} completely duplicate rows.", source=MODULE)
 
@@ -184,3 +191,66 @@ def save_cleaned_data(df: pd.DataFrame, csv_path: str):
     log_stage(f"Saving Cleaned Data file: {os.path.basename(csv_path)} ", True)
     df.to_csv(csv_path, index=False)
     log_stage(f"Saved Cleaned Data file : {os.path.basename(csv_path)}", True)
+
+
+def get_dataframe_by_partial_file_name(directory: str, partial_file_name: str):
+    log("🚀 Fetching data frame from partial file name", source=MODULE)
+    start = time.time()
+
+    # Ensure directory is valid
+    if not os.path.exists(directory):
+        raise FileNotFoundError(f"Directory '{directory}' does not exist.")
+
+    # Get matching files
+    matched_files = [
+        f
+        for f in os.listdir(directory)
+        if partial_file_name in f and f.endswith(".csv")
+    ]
+
+    if not matched_files:
+        raise FileNotFoundError(
+            f"No file containing '{partial_file_name}' found in {directory}"
+        )
+
+    # Get the latest matched file by modification time
+    matched_files_full_paths = [os.path.join(directory, f) for f in matched_files]
+    latest_file = max(matched_files_full_paths, key=os.path.getmtime)
+
+    log(f"📄 Matched file: {os.path.basename(latest_file)}", source=MODULE)
+
+    # Read the CSV
+    df = read_csv_file(latest_file)
+
+    end = time.time()
+    log(f"✅ Fetching DataFrame completed in {end - start:.2f} seconds", source=MODULE)
+
+    return df
+
+
+def get_cat_and_con_cols_list(df: pd.DataFrame):
+    log("🚀 Fetching cat and cont columns from dataframe ", source=MODULE)
+    cat_cols = df.select_dtypes(include="object").columns.to_list()
+    con_cols = df.select_dtypes(include=["int64", "float64"]).columns.to_list()
+    log("🚀 Fetched cat and cont columns from dataframe ", source=MODULE)
+    return cat_cols, con_cols
+
+
+def get_imp_con_cols(df: pd.DataFrame, target_col: str, corr_threshold: float):
+    log(
+        "🚀 Fetching important continuous columns from dataframe for features list",
+        source=MODULE,
+    )
+
+    corr_series = (
+        df.corr(numeric_only=True)[target_col]
+        .drop(target_col)
+        .loc[lambda x: x.abs() > corr_threshold]
+        .sort_values(ascending=False)
+    )
+
+    log(
+        "✅ Fetched important continuous columns from dataframe for features list",
+        source=MODULE,
+    )
+    return corr_series
