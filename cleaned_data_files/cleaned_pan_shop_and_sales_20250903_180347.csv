@@ -1,4 +1,4 @@
-Name,Size,Timings,Owner,Rent,Location,City,State,Date,Time,Item,Item_Description,Packed,Quantity,Sold,UnitPrice,Profit
+name,size,timings,owner,rent,location,city,state,date,time,item,item_description,packed,quantity,sold,unitprice,profit
 Isaiah's Pan Shop,74,11:00 - 21:00,Kala Mody,11914,"H.No. 75, Chandran Chowk",Howrah,West Bengal,2025-07-18,07:01:00,Drinks,International,Yes,31,30,48.55,480.35
 Isaiah's Pan Shop,74,11:00 - 21:00,Kala Mody,11914,"H.No. 75, Chandran Chowk",Howrah,West Bengal,2025-08-01,05:39:57,Chocolates,Domestic,Yes,76,66,33.71,301.59
 Isaiah's Pan Shop,74,11:00 - 21:00,Kala Mody,11914,"H.No. 75, Chandran Chowk",Howrah,West Bengal,2025-08-08,07:40:23,Drinks,Domestic,Yes,31,6,34.5,21.07
