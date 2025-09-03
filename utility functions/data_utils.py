@@ -9,30 +9,25 @@ from datetime import datetime
 # Logging function with timestamp
 from datetime import datetime as dt
 
+from log_utils import log
 
-def log(msg):
-    # Get the name of the calling file/module
-    frame = inspect.stack()[1]
-    module = inspect.getmodule(frame[0])
-    caller = os.path.basename(module.__file__) if module and hasattr(module, "__file__") else "JupyterNotebook"
-
-    print(f"{dt.now().strftime('%Y-%m-%d %H:%M:%S')} | {caller} | {msg}")
+MODULE = "data_utils.py"
 
 
 def read_csv_file(path):
     """Reads a CSV file and returns a DataFrame."""
     start = time.time()
-    log(f"📥 Reading CSV: {path}")
+    log(f"📥 Reading CSV: {path}", source=MODULE)
     try:
         df = pd.read_csv(path)
-        log(f"✅ Loaded CSV with shape: {df.shape}")
+        log(f"✅ Loaded CSV with shape: {df.shape}", source=MODULE)
         return df
     except Exception as e:
-        log(f"Error reading {path}: {e}")
+        log(f"Error reading {path}: {e}", source=MODULE)
         return None
     finally:
         end = time.time()
-        log(f"⏱️ Time taken to read CSV: {end - start:.2f} seconds")
+        log(f"⏱️ Time taken to read CSV: {end - start:.2f} seconds", source=MODULE)
 
 
 def clean_nulls(
@@ -57,7 +52,7 @@ def clean_nulls(
     total_missing = df.isnull().sum().sum()
 
     if total_missing == 0:
-        log("✅ No nulls found in the DataFrame. Nothing to clean.")
+        log("✅ No nulls found in the DataFrame. Nothing to clean.", source=MODULE)
         return df.copy()
 
     df_copy = df.copy()
@@ -95,26 +90,26 @@ def clean_nulls(
                 filled_columns["skipped"].append(col)
 
     # ✅ log final summary
-    log(f"⚠️ Found {total_missing} missing values in the DataFrame.")
-    log("🧹 Missing values filled using the following strategies:")
+    log(f"⚠️ Found {total_missing} missing values in the DataFrame.", source=MODULE)
+    log("🧹 Missing values filled using the following strategies:", source=MODULE)
 
     if filled_columns["mean"]:
-        log(f"   • Mean fill: {filled_columns['mean']}")
+        log(f"   • Mean fill: {filled_columns['mean']}", source=MODULE)
     if filled_columns["median"]:
-        log(f"   • Median fill: {filled_columns['median']}")
+        log(f"   • Median fill: {filled_columns['median']}", source=MODULE)
     if filled_columns["categorical"]:
-        log(f"   • Categorical fill: {filled_columns['categorical']}")
+        log(f"   • Categorical fill: {filled_columns['categorical']}", source=MODULE)
     if filled_columns["datetime"]:
-        log(f"   • Datetime fill: {filled_columns['datetime']}")
+        log(f"   • Datetime fill: {filled_columns['datetime']}", source=MODULE)
     if filled_columns["skipped"]:
-        log(f"   ⚠️ Skipped unsupported columns: {filled_columns['skipped']}")
+        log(f"   ⚠️ Skipped unsupported columns: {filled_columns['skipped']}", source=MODULE)
 
     return df_copy
 
 
 def standardize_columns(df):
     """Strips and lowercases column names."""
-    log("🧹 Standardizing column names")
+    log("🧹 Standardizing column names", source=MODULE)
     df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
 
     return df
@@ -139,26 +134,26 @@ def check_duplicates(df, drop=False, subset=None, keep="first", verbose=True):
 
     if verbose:
         if subset:
-            log(f"🔍 Found {num_dupes} duplicate rows based on columns: {subset}")
+            log(f"🔍 Found {num_dupes} duplicate rows based on columns: {subset}", source=MODULE)
         else:
-            log(f"🔍 Found {num_dupes} completely duplicate rows.")
+            log(f"🔍 Found {num_dupes} completely duplicate rows.", source=MODULE)
 
     if drop and num_dupes > 0:
         df_cleaned = df.drop_duplicates(subset=subset, keep=keep)
         if verbose:
-            log(f"✅ Dropped {num_dupes} duplicate rows.")
+            log(f"✅ Dropped {num_dupes} duplicate rows.", source=MODULE)
         return df_cleaned
 
     return df
 
 
 def log_stage(stage: str, is_start=True):
-    log(f"{stage} - {'Start' if is_start else 'End'}")
+    log(f"{stage} - {'Start' if is_start else 'End'}", source=MODULE)
 
 
 def preprocess_data(csv_path: str):
     """Full data preprocessing pipeline."""
-    log("🚀 Starting full data preprocessing pipeline")
+    log("🚀 Starting full data preprocessing pipeline", source=MODULE)
     start = time.time()
     log_stage(f"Loading data file : {os.path.basename(csv_path)}", True)
     df = read_csv_file(csv_path)
@@ -180,7 +175,7 @@ def preprocess_data(csv_path: str):
     log_stage("Cleaning Nulls", False)
 
     end = time.time()
-    log(f"✅ Data preprocessing completed in {end - start:.2f} seconds")
+    log(f"✅ Data preprocessing completed in {end - start:.2f} seconds", source=MODULE)
 
     return df_cleaned
 
