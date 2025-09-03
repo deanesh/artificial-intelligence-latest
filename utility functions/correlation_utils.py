@@ -6,7 +6,6 @@ from log_utils import log
 import time
 
 # Logging function with timestamp
-from datetime import datetime as dt
 
 MODULE = "correlation_utils.py"
 
