@@ -3,7 +3,7 @@ from langchain.llms import Ollama  # or your LLM wrapper
 
 # Load file and extract columns
 df = pd.read_excel(
-    r"E:\Git-Repos\artificial-intelligence-latest\generative_ai\projects\DT_HDFC_Bank_Stmt_Aug_27_24_To_Aug_25_25.xls",
+    r"E:\Git-Repos\artificial-intelligence-latest\generative_ai\projects\data.xls",
     sheet_name="Aug_27_24_To_Aug_25_25"
 )
 columns = df.columns.tolist()
