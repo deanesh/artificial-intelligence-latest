@@ -10,3 +10,5 @@ pydantic
 ipykernel
 jupyter
 streamlit
+langchain
+langchain-community
