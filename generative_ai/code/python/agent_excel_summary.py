@@ -2,11 +2,12 @@ import pandas as pd
 from langchain_community.llms import Ollama
 import streamlit as st
 
+
 # Step 1: Load and summarize Excel
 def summarize_excel(file_path="data.xlsx"):
-    file_path = r"E:\Git-Repos\artificial-intelligence-latest\generative_ai\projects\data.xlsx"
+    # file_path = r"..\projects\summary.xls"
     df = pd.read_excel(file_path)
-    numeric_cols = df.select_dtypes(include='number').columns
+    numeric_cols = df.select_dtypes(include="number").columns
     summary_text = "Here are the stats for each numeric column:\n"
 
     for col in numeric_cols:
@@ -20,20 +21,29 @@ def summarize_excel(file_path="data.xlsx"):
         )
     return summary_text
 
+
 # Step 2: Pass to LLM
 summary = summarize_excel("data.xlsx")
 
+print(summary)
+import sys
+
+sys.exit(1)
+
 llm = Ollama(model="gemma:2b")
 
-prompt = summary + "\n\nPlease analyze this data and suggest any patterns or anomalies you notice."
+prompt = (
+    summary
+    + "\n\nPlease analyze this data and suggest any patterns or anomalies you notice."
+)
 
 st.title("Excel Summary Assistant")
 
-response = llm(prompt)
+# response = llm(prompt)
 print("\n🤖 LLM Response:\n", response)
 
 st.subheader("Summary:")
 st.text(summary)
 
 st.subheader("🤖 LLM Analysis:")
-st.markdown(response)
+# st.markdown(response)
