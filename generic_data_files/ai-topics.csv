@@ -1,0 +1,12 @@
+﻿Topic,Flow,Comments,Links
+Artificial Intelligence (AI),Data → Reasoning → Decision/Action,Broad field aiming to simulate human intelligence,AI Overview
+Machine Learning (ML),Data → Training → Model → Prediction,Subset of AI; learns patterns from data,Google ML Crash Course
+Deep Learning,Data → Neural Networks → Features → Output,ML with deep neural networks for complex tasks,Deep Learning Book
+Natural Language Processing (NLP),Text → Tokenization → Embedding → Model → Output,Enables machines to understand and generate human language,Hugging Face NLP
+Transformers Architecture,Input → Embedding → Attention → FFN → Output,Backbone of LLMs; processes data in parallel with attention mechanism,Transformer Paper
+Generative AI,Prompt → Model → Generate Output,"Creates new text, code, images, etc. using learned patterns",OpenAI
+Agentic AI,Goal → Plan → Tool Use → Action,Autonomous AI agents that break down and execute tasks,Auto-GPT
+CNN (Convolutional Neural Network),Image → Convolution → Pooling → Output,Specialized for image processing and feature extraction,CNN Guide
+RNN (Recurrent Neural Network),Sequence → Hidden State → Output,Good for sequence data but has limitations with long dependencies,RNN Explained
+RAG (Retrieval-Augmented Generation),Query → Retrieve Docs → Generate Answer,"Combines search and generation for grounded, factual AI responses",RAG Paper
+LangChain,Prompt → Chain → Tools/Memory → Response,Framework to build powerful LLM apps using tools and agents,LangChain
